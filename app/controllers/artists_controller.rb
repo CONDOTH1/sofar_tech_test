@@ -3,7 +3,6 @@ require './lib/web_helper'
 
 class ArtistsController < ApplicationController
   def index
-    # import
     @artists = Artist.all
   end
 

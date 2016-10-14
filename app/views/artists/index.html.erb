@@ -1,33 +1,29 @@
 <% if @artists.any? %>
   <% @artists.each do |artist| %>
-    <h2><%= link_to artist.title, artist_path(artist) %></h2>
-    <%= "Genre: #{artist.genre}" %>
+    <h2><%= link_to artist.title, artist_path(artist) %></h2> <%= "Genre: #{artist.genre}" %>
     <h4> <%= "#{artist.title} Songs" %> </h4>
     <ul>
       <% artist.songs.each do |song| %>
         <li>
-          <%= song.title %><%= song.rating %>
-          <%= song.video.video_title %>
+          <%= "Title - #{song.title}" %>&nbsp;<%= " Rating #{song.rating}" %>
           <ul>
               <li>
-                <!-- <% City.find(song.city_id).city_title%> -->
-                <%=find_city(song.city_id)%>
+                <%= "Video: #{song.video.video_title}" %>&nbsp;<%="City Filmed: #{find_city(song.city_id)}"%>
               </li>
           </ul>
-          <%= link_to "Add City for #{song.title}", new_song_city_path(song)%>
-          <% if !song.video %>
-            <%=link_to "Add Video for #{song.title}", new_song_video_path(song)%>
-          <% end %>
         </li>
       <% end %>
     </ul>
-    <%= link_to "Edit #{artist.title}", edit_artist_path(artist) %>
-    <%= link_to "Delete #{artist.title}", artist_path(artist), method: :delete %>
-    <%= link_to "Add Song for #{artist.title}", new_artist_song_path(artist)%>
+    <div class="btn-group">
+      <%= link_to "Edit", edit_artist_path(artist), :html => { :class => "btn" }%>&nbsp;
+      <%= link_to "Add Song".html_safe, new_artist_song_path(artist), :html => { :class => "btn" }%>
+      <% if !artist.songs%>
+        <%= link_to "Delete".html_safe, artist_path(artist).html_safe, {method: :delete, :html => { :class => "btn" }}%>
+      <%end%>
+    </div>
   <% end %>
 <% else %>
   <h1>No artists yet</h1>
 <% end %>
-  <!-- <a href='#'>Update with artists</a> -->
   <%= link_to "Import Music From Api", import_artists_path %>
   <%= link_to "Add an Artist", new_artist_path %>
