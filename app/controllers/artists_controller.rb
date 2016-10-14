@@ -74,7 +74,7 @@ class ArtistsController < ApplicationController
               find_city = City.find_by(city_title: city)
 
               music = video["song"]["title"]
-              new_song = find_artist.songs.create(title: music, rating: 2, city_id: find_city.id)
+              new_song = find_artist.songs.create(title: music, rating: 5, city_id: find_city.id)
 
               new_video = new_song.create_video(video_title: video_param)
             end

@@ -1,7 +1,6 @@
 class CitiesController < ApplicationController
 
   def new
-    p "======================city1"
     @song = Song.find(params[:song_id])
     @city = City.new
   end
@@ -13,9 +12,6 @@ class CitiesController < ApplicationController
   end
 
   def show
-    p "======================city3"
-
-    # p "=============#{city_id.inspect}here"
     @city = City.find(city_id)
     redirect_to artists_path
   end
