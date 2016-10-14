@@ -1,0 +1,5 @@
+<%= form_for [@song, @video] do |f| %>
+  <%= f.label :video_title %>
+  <%= f.text_area :video_title %>
+  <%= f.submit 'Add Video' %>
+<% end %>

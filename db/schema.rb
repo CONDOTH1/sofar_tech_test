@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161013161129) do
+ActiveRecord::Schema.define(version: 20161014083537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,15 @@ ActiveRecord::Schema.define(version: 20161013161129) do
     t.index ["city_id"], name: "index_songs_on_city_id", using: :btree
   end
 
+  create_table "videos", force: :cascade do |t|
+    t.text     "video_title"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "song_id"
+    t.index ["song_id"], name: "index_videos_on_song_id", using: :btree
+  end
+
   add_foreign_key "songs", "artists"
   add_foreign_key "songs", "cities"
+  add_foreign_key "videos", "songs"
 end

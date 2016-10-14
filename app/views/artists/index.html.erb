@@ -7,6 +7,7 @@
       <% artist.songs.each do |song| %>
         <li>
           <%= song.title %><%= song.rating %>
+          <%= song.video.video_title %>
           <ul>
               <li>
                 <!-- <% City.find(song.city_id).city_title%> -->
@@ -14,6 +15,9 @@
               </li>
           </ul>
           <%= link_to "Add City for #{song.title}", new_song_city_path(song)%>
+          <% if !song.video %>
+            <%=link_to "Add Video for #{song.title}", new_song_video_path(song)%>
+          <% end %>
         </li>
       <% end %>
     </ul>

@@ -6,9 +6,10 @@ Rails.application.routes.draw do
       get :import
     end
   end
-  
+
   resources :songs do
     resources :cities
+    resources :videos
   end
 
 end

@@ -55,9 +55,15 @@ class ArtistsController < ApplicationController
   end
 
   def music_api
-    @json = Json.new
-    @data = @json.musicApi
-    @data[:results].each do |video|
+    # @json = Json.new
+    # @data = @json.musicApi
+
+    url = 'https://s3-eu-west-1.amazonaws.com/sofar-eu-1/video_data.json'
+    uri = URI(url)
+    @response = Net::HTTP.get(uri)
+    JSON.parse(@response)
+    # @data[:results].each do |video|
+    @response[:results].each do |video|
       if video[:song]
         artist = video[:song][:artist][:title]
         new_artist = Artist.create(title: artist) if !Artist.exists?(title: artist)
@@ -67,9 +73,13 @@ class ArtistsController < ApplicationController
 
         find_artist = Artist.find_by(title: artist)
         find_city = City.find_by(city_title: city)
+        # find_video = Video.find_by(video_title: video)
+
         music = video[:song][:title]
-        # @artist.songs.create(title: music)
         new_song = find_artist.songs.create(title: music, rating: 2, city_id: find_city.id)
+
+        video_param = video[:video_uid]
+        new_video = new_song.create_video(video_title: video_param)
 
       end
     end
