@@ -3,5 +3,7 @@
   <%= f.text_field :title %>
   <%= f.label :genre %>
   <%= f.text_area :genre %>
+  <%= f.label :rating %>
+  <%= f.select :rating, (1..5) %>
   <%= f.submit %>
 <% end %>

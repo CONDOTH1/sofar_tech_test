@@ -1,7 +1,7 @@
 <% if @artists.any? %>
   <% @artists.each do |artist| %>
     <h2><%= link_to artist.title, artist_path(artist) %></h2> <%= "Genre: #{artist.genre}" %>
-    <h4> <%= "#{artist.title} Songs" %> </h4>
+    <h4> <%= "#{artist.title} - Songs" %> </h4>
     <ul>
       <% artist.songs.each do |song| %>
         <li>
@@ -15,15 +15,10 @@
       <% end %>
     </ul>
     <div class="btn-group">
-      <%= link_to "Edit", edit_artist_path(artist), :html => { :class => "btn" }%>&nbsp;
-      <%= link_to "Add Song".html_safe, new_artist_song_path(artist), :html => { :class => "btn" }%>
-      <% if !artist.songs%>
-        <%= link_to "Delete".html_safe, artist_path(artist).html_safe, {method: :delete, :html => { :class => "btn" }}%>
-      <%end%>
+      <%= link_to "Edit and Rate #{artist.title}", edit_artist_path(artist), :html => { :class => "btn" }%>&nbsp;
+      <%= link_to "Delete #{artist.title}", artist_path(artist), {method: :delete, :html => { :class => "btn" }}%>
     </div>
   <% end %>
 <% else %>
   <h1>No artists yet</h1>
 <% end %>
-  <%= link_to "Import Music From Api", import_artists_path %>
-  <%= link_to "Add an Artist", new_artist_path %>

@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 feature 'artists' do
-  # context 'artists are not visible' do
-  #   scenario 'should display a artists heading' do
-  #     visit '/artists'
-  #     expect(page).to have_content 'No artists yet'
-  #     expect(page).to have_link 'Add an Artist'
-  #   end
-  # end
+  context 'artists are not visible' do
+    scenario 'should display a artists heading' do
+      visit '/artists'
+      expect(page).to have_content 'No artists yet'
+      expect(page).to have_link 'Add an Artist'
+    end
+  end
 
   context 'artists have been added' do
     before do
@@ -45,44 +45,33 @@ feature 'artists' do
       end
     end
 
-  context 'import api data' do
-      scenario 'lets you import data from api' do
-        VCR.use_cassette "model/music_api" do
-          visit '/artists'
-          click_link "Import Music From Api"
-          expect(page).to have_content 'Pat McKillen'
-        end
+    context 'viewing artists' do
+
+      let!(:pat){ Artist.create(title:'Pat McCillen', genre: 'Acustic') }
+
+      scenario 'lets a user view a artists details' do
+        visit '/artists'
+        click_link 'Pat McCillen'
+        expect(page).to have_content 'Pat McCillen'
+        expect(current_path).to eq "/artists/#{pat.id}"
       end
     end
-  end
 
-  context 'viewing artists' do
+    context 'editing artists' do
 
-    let!(:pat){ Artist.create(title:'Pat McCillen', genre: 'Acustic') }
+      before { Artist.create title: 'Pat McCillen', genre: 'Acustic' }
 
-    scenario 'lets a user view a artists details' do
-      visit '/artists'
-      click_link 'Pat McCillen'
-      expect(page).to have_content 'Pat McCillen'
-      expect(current_path).to eq "/artists/#{pat.id}"
+      scenario 'let a user edit a artists' do
+        visit '/artists'
+        click_link 'Edit and Rate Pat McCillen'
+        fill_in 'Title', with: 'Pat'
+        fill_in 'Genre', with: 'Acustic/Soulful'
+        click_button 'Update Artist'
+        expect(page).to have_content 'Pat'
+        expect(page).to have_content 'Acustic/Soulful'
+        expect(current_path).to eq '/artists'
+      end
     end
-  end
-
-  context 'editing artists' do
-
-    before { Artist.create title: 'Pat McCillen', genre: 'Acustic' }
-
-    scenario 'let a user edit a artists' do
-      visit '/artists'
-      click_link 'Edit Pat McCillen'
-      fill_in 'Title', with: 'Pat'
-      fill_in 'Genre', with: 'Acustic/Soulful'
-      click_button 'Update Artist'
-      expect(page).to have_content 'Pat'
-      expect(page).to have_content 'Acustic/Soulful'
-      expect(current_path).to eq '/artists'
-    end
-  end
 
   context 'deleting artists' do
 
@@ -93,6 +82,18 @@ feature 'artists' do
       click_link 'Delete Pat McCillen'
       expect(page).not_to have_content 'Pat McCillen'
       expect(page).to have_content 'artist deleted successfully'
+    end
+  end
+
+
+  context 'import api data' do
+      scenario 'lets you import data from api' do
+        VCR.use_cassette "model/music_api" do
+          visit '/artists'
+          click_link "Import Music From Api"
+          expect(page).to have_content 'Pat McKillen'
+        end
+      end
     end
   end
 
