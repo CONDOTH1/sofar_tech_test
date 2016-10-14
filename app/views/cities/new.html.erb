@@ -1,0 +1,5 @@
+<%= form_for [@song, @city] do |f| %>
+  <%= f.label :city_title %>
+  <%= f.text_area :city_title %>
+  <%= f.submit 'Add City' %>
+<% end %>

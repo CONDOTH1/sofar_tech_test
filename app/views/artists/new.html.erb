@@ -1,0 +1,15 @@
+<% if @artist.errors.any? %>
+  <section id="errors" >
+    <h2> <%= pluralize(@artist.errors.count, "error") %> prohibited this artist from being saved: </h2>
+    <ul>
+      <% @artist.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </section>
+<% end %>
+<%= form_for @artist do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  <%= f.submit %>
+<% end %>

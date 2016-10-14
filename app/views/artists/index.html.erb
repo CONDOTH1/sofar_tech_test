@@ -1,0 +1,29 @@
+<% if @artists.any? %>
+  <% @artists.each do |artist| %>
+    <h2><%= link_to artist.title, artist_path(artist) %></h2>
+    <%= "Genre: #{artist.genre}" %>
+    <h4> <%= "#{artist.title} Songs" %> </h4>
+    <ul>
+      <% artist.songs.each do |song| %>
+        <li>
+          <%= song.title %><%= song.rating %>
+          <ul>
+              <li>
+                <!-- <% City.find(song.city_id).city_title%> -->
+                <%=find_city(song.city_id)%>
+              </li>
+          </ul>
+          <%= link_to "Add City for #{song.title}", new_song_city_path(song)%>
+        </li>
+      <% end %>
+    </ul>
+    <%= link_to "Edit #{artist.title}", edit_artist_path(artist) %>
+    <%= link_to "Delete #{artist.title}", artist_path(artist), method: :delete %>
+    <%= link_to "Add Song for #{artist.title}", new_artist_song_path(artist)%>
+  <% end %>
+<% else %>
+  <h1>No artists yet</h1>
+<% end %>
+  <!-- <a href='#'>Update with artists</a> -->
+  <%= link_to "Import Music From Api", import_artists_path %>
+  <%= link_to "Add an Artist", new_artist_path %>
