@@ -44,6 +44,16 @@ feature 'artists' do
         expect(page).to have_content 'error'
       end
     end
+
+  context 'import api data' do
+      scenario 'lets you import data from api' do
+        VCR.use_cassette "model/music_api" do
+          visit '/artists'
+          click_link "Import Music From Api"
+          expect(page).to have_content 'Pat McKillen'
+        end
+      end
+    end
   end
 
   context 'viewing artists' do

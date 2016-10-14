@@ -12,4 +12,6 @@ describe Artist, type: :model do
     artist = Artist.new(title: "John's Band")
     expect(artist).to have(1).error_on(:title)
   end
+
+
 end

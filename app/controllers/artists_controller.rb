@@ -55,33 +55,32 @@ class ArtistsController < ApplicationController
   end
 
   def music_api
-    # @json = Json.new
-    # @data = @json.musicApi
-
     url = 'https://s3-eu-west-1.amazonaws.com/sofar-eu-1/video_data.json'
     uri = URI(url)
     @response = Net::HTTP.get(uri)
-    JSON.parse(@response)
-    # @data[:results].each do |video|
-    @response[:results].each do |video|
-      if video[:song]
-        artist = video[:song][:artist][:title]
-        new_artist = Artist.create(title: artist) if !Artist.exists?(title: artist)
+    @data = JSON.parse(@response)
+    @data.each do |video|
+      video_param = video["video_uid"]
+        if video.include?("song")
+          if video["song"].include?("artist")
+            if video["song"].include?("city")
 
-        city = video[:song][:city][:title]
-        new_city = City.create(city_title: city) if !City.exists?(city_title: city)
+              artist = video["song"]["artist"]["title"]
+              new_artist = Artist.create(title: artist) if !Artist.exists?(title: artist)
 
-        find_artist = Artist.find_by(title: artist)
-        find_city = City.find_by(city_title: city)
-        # find_video = Video.find_by(video_title: video)
+              city = video["song"]["city"]["title"]
+              new_city = City.create(city_title: city) if !City.exists?(city_title: city)
 
-        music = video[:song][:title]
-        new_song = find_artist.songs.create(title: music, rating: 2, city_id: find_city.id)
+              find_artist = Artist.find_by(title: artist)
+              find_city = City.find_by(city_title: city)
 
-        video_param = video[:video_uid]
-        new_video = new_song.create_video(video_title: video_param)
+              music = video["song"]["title"]
+              new_song = find_artist.songs.create(title: music, rating: 2, city_id: find_city.id)
 
-      end
+              new_video = new_song.create_video(video_title: video_param)
+            end
+          end
+        end
     end
   end
 
