@@ -20,14 +20,10 @@ class MusicFromApi
         if video["song"].include?("city")
 
           artist(video)
-
-          city = video["song"]["city"]["title"]
-          new_city = City.create(city_title: city) if !City.exists?(city_title: city)
-
-          find_city = City.find_by(city_title: city)
-
+          city(video)
+          
           music = video["song"]["title"]
-          new_song = @artist.songs.create(title: music, rating: 5, city_id: find_city.id)
+          new_song = @artist.songs.create(title: music, rating: 5, city_id: @city.id)
 
           new_video = new_song.create_video(video_title: video_param)
         end
@@ -43,6 +39,16 @@ class MusicFromApi
 
   def find_artist(artist_title)
     @artist = Artist.find_by(title: artist_title)
+  end
+
+  def city(video)
+    city_title = video["song"]["city"]["title"]
+    City.create(city_title: city_title) if !City.exists?(city_title: city_title)
+    find_city(city_title)
+  end
+
+  def find_city(city_title)
+    @city = City.find_by(city_title: city_title)
   end
 
 end
