@@ -14,18 +14,13 @@ class MusicFromApi
   end
 
   def guard_clauses(video)
-    video_param = video["video_uid"]
     if video.include?("song")
       if video["song"].include?("artist")
         if video["song"].include?("city")
-
           artist(video)
           city(video)
-          
-          music = video["song"]["title"]
-          new_song = @artist.songs.create(title: music, rating: 5, city_id: @city.id)
-
-          new_video = new_song.create_video(video_title: video_param)
+          song(video)
+          video(video)
         end
       end
     end
@@ -49,6 +44,16 @@ class MusicFromApi
 
   def find_city(city_title)
     @city = City.find_by(city_title: city_title)
+  end
+
+  def song(video)
+    song_title = video["song"]["title"]
+    @song = @artist.songs.create(title: song_title, rating: 5, city_id: @city.id)
+  end
+
+  def video(video)
+    video_title = video["video_uid"]
+    @song.create_video(video_title: video_title)
   end
 
 end
