@@ -77,7 +77,7 @@ feature 'artists' do
 
     before { Artist.create title: 'Pat McCillen', genre: 'Acustic' }
 
-    scenario 'removes a artist when a user clicks a delete link' do
+    scenario 'removes an artist when a user clicks a delete link' do
       visit '/artists'
       click_link 'Delete Pat McCillen'
       expect(page).not_to have_content 'Pat McCillen'
@@ -87,12 +87,22 @@ feature 'artists' do
 
 
   context 'import api data' do
+
+    before do
+      VCR.use_cassette "model/music_api" do
+        visit '/artists'
+        click_link "Import Music From Api"
+      end
+    end
+
       scenario 'lets you import data from api' do
-        VCR.use_cassette "model/music_api" do
-          visit '/artists'
-          click_link "Import Music From Api"
           expect(page).to have_content 'Pat McKillen'
-        end
+      end
+
+      scenario 'removes an artist, songs and videos with the delete link' do
+          click_link 'Delete Pat McKillen'
+          expect(page).not_to have_content 'Pat McKillen'
+          expect(page).to have_content 'artist deleted successfully'
       end
     end
   end

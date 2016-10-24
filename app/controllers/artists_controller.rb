@@ -1,6 +1,5 @@
 require './lib/music_from_api'
 
-
 class ArtistsController < ApplicationController
   def index
     @artists = Artist.all
@@ -66,6 +65,5 @@ class ArtistsController < ApplicationController
   def artist_params
     params.require(:artist).permit(:title, :genre)
   end
-
 
 end
